@@ -79,6 +79,14 @@ WSGI_APPLICATION = 'calgaryhacks2021.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'djangoData',
+            'USER': 'djangoUser',
+            'PASSWORD': 'ch2021FMkingsMARIA!',
+            'HOST': '127.0.0.1',
+            'PORT': '3306',
+    },
+    'vo':{
+        'ENGINE': 'django.db.backends.mysql',
             'NAME': 'task_home',
             'USER': 'djangoUser',
             'PASSWORD': 'ch2021FMkingsMARIA!',

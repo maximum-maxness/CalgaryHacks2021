@@ -1,4 +1,5 @@
 CREATE DATABASE task_home;
+CREATE DATABASE djangoData;
 
 USE task_home;
 

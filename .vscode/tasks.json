@@ -2,15 +2,38 @@
     // See https://go.microsoft.com/fwlink/?LinkId=733558
     // for the documentation about the tasks.json format
     "version": "2.0.0",
-    "tasks": [{
+    "tasks": [
+        {
             "label": "Build MariaDB Docker Image",
             "type": "docker-build",
             "dockerBuild": {
-                "context": "${workspaceFolder}/docker",
+                "context": "${workspaceFolder}/docker/mariadb",
                 "dockerfile": "${workspaceFolder}/docker/mariadb/Dockerfile",
                 "tag": "ch21fmkingsmaria",
                 "pull": true
             }
+        },
+        {
+            "label": "Stop Existing MariaDB Docker Image",
+            "type": "shell",
+            "command": "set -e && docker stop CH21DB || true && docker rm CH21DB || true",
+            "problemMatcher": [
+                {
+                  "pattern": [
+                    {
+                      "regexp": ".",
+                      "file": 1,
+                      "location": 2,
+                      "message": 3
+                    }
+                  ],
+                  "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": ".",
+                    "endsPattern": ".",
+                  }
+                }
+              ]
         },
         {
             "label": "Run MariaDB Docker Image",
@@ -19,17 +42,21 @@
                 "image": "ch21fmkingsmaria",
                 "command": "",
                 "containerName": "CH21DB",
-                "ports": [{
-                    "hostPort": 3306,
-                    "containerPort": 3306
-                }]
+                "ports": [
+                    {
+                        "hostPort": 3306,
+                        "containerPort": 3306
+                    }
+                ]
             },
+            "dependsOrder": "sequence",
             "dependsOn": [
-                "Build MariaDB Image"
+                "Stop Existing MariaDB Docker Image",
+                "Build MariaDB Docker Image"
             ]
         },
         {
-            "label": "DJango Apply New Migrations",
+            "label": "DJango Detect Changes",
             "type": "process",
             "command": "${config:python.pythonPath}",
             "args": [
@@ -47,7 +74,7 @@
             "problemMatcher": []
         },
         {
-            "label": "Migrate DJango Changes",
+            "label": "Migrate All DJango Changes",
             "type": "process",
             "command": "${config:python.pythonPath}",
             "args": [
@@ -64,61 +91,61 @@
             },
             "problemMatcher": [],
             "dependsOn": [
-                "DJango Make New Migration"
+                "DJango Detect Changes"
             ]
         },
-        // {
-        //     "type": "docker-build",
-        //     "label": "Build NodeJS React Docker Image",
-        //     "platform": "node",
-        //     "dockerBuild": {
-        //         "dockerfile": "${workspaceFolder}/docker/nodejs/Dockerfile",
-        //         "context": "${workspaceFolder}/frontend",
-        //         "pull": true
-        //     },
-        //     "node": {
-        //         "package": "${workspaceFolder}/frontend/package.json"
-        //     }
-        // },
-        // {
-        //     "type": "docker-run",
-        //     "label": "Run NodeJS React: Release",
-        //     "dependsOn": [
-        //         "Build NodeJS React Docker Image"
-        //     ],
-        //     "platform": "node",
-        //     "node": {
-        //         "package": "${workspaceFolder}/frontend/package.json"
-        //     },
-        //     "dockerRun": {
-        //         "command": "npm start",
-        //         "remove": true
-        //     }
-        // },
-        // {
-        //     "type": "docker-run",
-        //     "label": "Run NodeJS React: Debug",
-        //     "dependsOn": [
-        //         "Build NodeJS React Docker Image"
-        //     ],
-        //     "platform": "node",
-        //     "dockerRun": {
-        //         "env": {
-        //             "DEBUG": "*",
-        //             "NODE_ENV": "development"
-        //         },
-        //         "command": "npm start --inspect=0.0.0.0:9229",
-        //         "remove": true,
-        //         "ports": [{
-        //             "hostPort": 3000,
-        //             "containerPort": 3000
-        //         }]
-        //     },
-        //     "node": {
-        //         "package": "${workspaceFolder}/frontend/package.json",
-        //         "enableDebugging": true,
-        //         "inspectMode": "break"
-        //     }
-        // }
+        {
+            "label": "Setup SQL Tables",
+            "type": "shell",
+            "options": {"cwd": "${workspaceFolder}/docker/mariadb"},
+            "command": "docker exec -it CH21DB mysql -u root -pfMkInGsBeStKiNgS  -e \"Use task_home; $(cat setupTables.sql)\"",
+            "problemMatcher": [
+                {
+                  "pattern": [
+                    {
+                      "regexp": ".",
+                      "file": 1,
+                      "location": 2,
+                      "message": 3
+                    }
+                  ],
+                  "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": ".",
+                    "endsPattern": ".",
+                  }
+                }
+              ],
+              "dependsOn": [
+                "Migrate All DJango Changes"
+            ]
+        },
+        {
+            "label": "Reinit DB, Migrate and Run DJango",
+            "type": "process",
+            "command": "${config:python.pythonPath}",
+            "args": [
+                "${workspaceFolder}/manage.py",
+                "runserver"
+            ],
+            "dependsOrder": "sequence",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true
+            },
+            "problemMatcher": [],
+            "dependsOn": [
+                "Run MariaDB Docker Image",
+                "Setup SQL Tables"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        }
     ]
 }
