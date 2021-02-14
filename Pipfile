@@ -9,6 +9,7 @@ djangorestframework = "*"
 django-cors-headers = "*"
 mysqlclient = "*"
 gunicorn = "==20.0.4"
+python-dateutil = "*"
 
 [dev-packages]
 autopep8 = "*"

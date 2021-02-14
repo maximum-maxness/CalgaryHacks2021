@@ -7,25 +7,6 @@ drop table if exists Task_State;
 drop table if exists House;
 drop table if exists House_Status;
 
--- drop table if exists Login;
--- drop table if exists Users;
-
--- create table Users
--- (
--- 	username INT(10) comment 'A Unique Username',
--- 	name NVARCHAR(64) not null comment 'Real Name of User',
--- 	cr_date DATETIME default NOW() not null comment 'Account Creation Date.'
--- )
--- comment 'Stores a users username, name and account creation date.';
-
--- create unique index Users_username_uindex
--- 	on Users (username); -- A username MUST be unique!
-
--- alter table Users
--- 	add constraint Users_pk
--- 		primary key (username); -- Username is the primary key for the users table.
-
-
 create table House_Status
 (
 	status_id int auto_increment COMMENT 'The ID of the combination of Level and Wear',
@@ -134,14 +115,14 @@ create unique index Task_Recurrence_recur_id_uindex
 
 create table Task
 (
-	task_id int auto_increment comment 'The ID for a ',
-	relation_id int not null,
-	task_elo int default 0 not null comment 'read: task score',
-	assign_date DATE default CURDATE() null,
-	deadline_date DATETIME null,
-	has_recur BOOL default FALSE not null,
-	recur_id int null,
-	state_id int not null,
+	task_id int auto_increment comment 'The ID for a single task',
+	relation_id int not null comment 'The relationship ID for the task',
+	task_elo int default 0 not null comment 'The score that the task is worth on completion',
+	assign_date DATE default CURDATE() null comment 'The date that the task was initially assigned',
+	deadline_date DATETIME null comment 'The date and time that the task is due',
+	has_recur BOOL default FALSE not null comment 'Whether the task will reoccur or not',
+	recur_id int null comment 'If the task does reoccur, then this is the recursion ID for it',
+	state_id int not null comment 'This tracks the completion state of the task',
 	constraint Task_Task_Recurrence_recur_id_fk
 		foreign key (recur_id) references Task_Recurrence (recur_id)
 			on delete cascade,
