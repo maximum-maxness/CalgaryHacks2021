@@ -102,10 +102,10 @@ This is an example of how to list things you need to use the software and how to
 
 ## Contact
 
-Max - maximuuu#7113 on Discord - maxwritchie@gmail.com
-Alex - Al20vortex#5530 on Discord - al20vortex@gmail.com
-Rahul - Rahul Nagulapally#7466 on Discord
-Josh - LaMonJus#0387 on Discord
+ * Max - maximuuu#7113 on Discord - maxwritchie@gmail.com
+ * Alex - Al20vortex#5530 on Discord - al20vortex@gmail.com
+ * Rahul - Rahul Nagulapally#7466 on Discord
+ * Josh - LaMonJus#0387 on Discord
 
 Project Link: [https://github.com/maximum-maxness/CalgaryHacks2021](https://github.com/maximum-maxness/CalgaryHacks2021)
 
