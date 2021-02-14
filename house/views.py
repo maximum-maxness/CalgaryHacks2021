@@ -1,11 +1,10 @@
 import datetime
 
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404, JsonResponse
 from django.shortcuts import render, get_object_or_404
 
 from .models import *
 import house.util
-
 
 f = '%Y-%m-%d %H:%M:%S'
 
@@ -55,7 +54,7 @@ def create_task_house_single_user(request, houseid, userid, elo, deadline_date, 
 # Create task for ALL USERS within a house
 
 def create_task_house_all_users(request, houseid, elo, deadline_date, task_state, recurs, recur_period):
-    housemate_list = Housemate.objects.filter(house_id=houseid)
+    housemate_list = Housemate.objects.filter(house_id=houseid).all()
     ret_task_list = list()
     for housemate in housemate_list:
         ret_task = create_relation_task(housemate, elo, deadline_date, task_state, recurs, recur_period)
@@ -63,14 +62,25 @@ def create_task_house_all_users(request, houseid, elo, deadline_date, task_state
     return render(request, template_name='house/addHouseAllUserTask.html',
                   context={'house_id': houseid, 'task_list': ret_task_list})
 
+
 # Create house for a user
 
 
 # Create a housemate relationship between a user and a house
 
 # READ
+# Debug: Get list of all userids?
 
 # Get list of tasks for user
+
+def list_user_tasks(request, user_id, *args, **kwargs):
+    relation_list = UserRelation.objects.filter(user_id=user_id).all()
+    task_list = list()
+    for relation in relation_list:
+        task_list.extend(Task.objects.filter(relation_id=relation.relation_id).all())
+    tasks = [x.serialize() for x in task_list]
+    data = {"response": tasks}
+    return JsonResponse(data)
 
 # Get list of tasks for house
 
