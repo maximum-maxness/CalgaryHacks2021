@@ -1,13 +1,30 @@
-body {
+* {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+body {
+  font-family: "Franklin Gothic Light", "Arial Narrow", Arial, sans-serif;
+  background: #e0fcfc;
+  color: black;
+}
+
+h1 {
+  font-family: "Didot, serif";
+  color: #e0fcfc;
+}
+
+.app {
+  /* width: 900vw; */
+  max-width: 1170px;
+  margin: 3rem auto;
+  margin-left: 1rem;
+  margin-right: 1rem;
+  /* display: grid; */
+  /* gap: 1rem; */
+  background: #e0fcfc;
+  /* Border radius is what allows you to nicely get those rounded corners */
+  border-radius: 1rem;
+  padding: 1rem 2rem;
 }

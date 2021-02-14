@@ -1,0 +1,35 @@
+.login_form {
+  width: 400px;
+  height: 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  margin: 0 auto;
+  border: 1px solid #dbbddb;
+  border-radius: 5px;
+  margin-top: 10vh;
+  padding-top: 10px;
+  background-color: rgb(255, 255, 255);
+}
+
+.form_element {
+  margin: 1rem;
+}
+
+input {
+  width: 95%;
+  border: 1px solid #dbdbbd;
+  padding: 5px;
+  margin: 2px 0;
+  border-radius: 5px;
+  background-color: #fafafa;
+  box-shadow: none;
+}
+
+button {
+  width: 100%;
+  margin: 5px, 0;
+  background-color: white;
+  font-family: Verdana;
+  padding: 5px;
+}
