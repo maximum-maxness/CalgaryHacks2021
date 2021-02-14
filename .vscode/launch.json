@@ -6,7 +6,7 @@
     "configurations": [
         {
             "command": "npm start",
-            "name": "Run npm start",
+            "name": "Node.js: React",
             "request": "launch",
             "cwd": "${workspaceFolder}/frontend",
             "type": "node-terminal"

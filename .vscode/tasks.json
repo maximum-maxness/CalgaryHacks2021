@@ -1,0 +1,124 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [{
+            "label": "Build MariaDB Docker Image",
+            "type": "docker-build",
+            "dockerBuild": {
+                "context": "${workspaceFolder}/docker",
+                "dockerfile": "${workspaceFolder}/docker/mariadb/Dockerfile",
+                "tag": "ch21fmkingsmaria",
+                "pull": true
+            }
+        },
+        {
+            "label": "Run MariaDB Docker Image",
+            "type": "docker-run",
+            "dockerRun": {
+                "image": "ch21fmkingsmaria",
+                "command": "",
+                "containerName": "CH21DB",
+                "ports": [{
+                    "hostPort": 3306,
+                    "containerPort": 3306
+                }]
+            },
+            "dependsOn": [
+                "Build MariaDB Image"
+            ]
+        },
+        {
+            "label": "DJango Apply New Migrations",
+            "type": "process",
+            "command": "${config:python.pythonPath}",
+            "args": [
+                "${workspaceFolder}/manage.py",
+                "makemigrations"
+            ],
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Migrate DJango Changes",
+            "type": "process",
+            "command": "${config:python.pythonPath}",
+            "args": [
+                "${workspaceFolder}/manage.py",
+                "migrate"
+            ],
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true
+            },
+            "problemMatcher": [],
+            "dependsOn": [
+                "DJango Make New Migration"
+            ]
+        },
+        // {
+        //     "type": "docker-build",
+        //     "label": "Build NodeJS React Docker Image",
+        //     "platform": "node",
+        //     "dockerBuild": {
+        //         "dockerfile": "${workspaceFolder}/docker/nodejs/Dockerfile",
+        //         "context": "${workspaceFolder}/frontend",
+        //         "pull": true
+        //     },
+        //     "node": {
+        //         "package": "${workspaceFolder}/frontend/package.json"
+        //     }
+        // },
+        // {
+        //     "type": "docker-run",
+        //     "label": "Run NodeJS React: Release",
+        //     "dependsOn": [
+        //         "Build NodeJS React Docker Image"
+        //     ],
+        //     "platform": "node",
+        //     "node": {
+        //         "package": "${workspaceFolder}/frontend/package.json"
+        //     },
+        //     "dockerRun": {
+        //         "command": "npm start",
+        //         "remove": true
+        //     }
+        // },
+        // {
+        //     "type": "docker-run",
+        //     "label": "Run NodeJS React: Debug",
+        //     "dependsOn": [
+        //         "Build NodeJS React Docker Image"
+        //     ],
+        //     "platform": "node",
+        //     "dockerRun": {
+        //         "env": {
+        //             "DEBUG": "*",
+        //             "NODE_ENV": "development"
+        //         },
+        //         "command": "npm start --inspect=0.0.0.0:9229",
+        //         "remove": true,
+        //         "ports": [{
+        //             "hostPort": 3000,
+        //             "containerPort": 3000
+        //         }]
+        //     },
+        //     "node": {
+        //         "package": "${workspaceFolder}/frontend/package.json",
+        //         "enableDebugging": true,
+        //         "inspectMode": "break"
+        //     }
+        // }
+    ]
+}

@@ -1,0 +1,7 @@
+CREATE DATABASE task_home;
+
+USE task_home;
+
+CREATE USER djangoUser IDENTIFIED BY 'ch2021FMkingsMARIA!';
+
+GRANT ALL PRIVILEGES ON *.* TO djangoUser WITH GRANT OPTION;
